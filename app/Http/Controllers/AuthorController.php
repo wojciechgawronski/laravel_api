@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use Illuminate\Http\Request;
+use App\Http\Requests\AuthorRequest;
 
 class AuthorController extends Controller
 {
@@ -88,11 +89,13 @@ class AuthorController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\AuthorRequest  $request
      * @param  \App\Models\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Author $author)
+
+    // public function update(Request $request, Author $author)
+    public function update(AuthorRequest $request, Author $author)
     {
         // so static, lets pass by request
         // $author->update([
@@ -105,7 +108,6 @@ class AuthorController extends Controller
         $author->update([
             'name' => $request->input('name')
         ]);
-
 
         return new AuthorResource($author);
     }
