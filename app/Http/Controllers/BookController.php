@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\AuthorResource;
-use App\Models\Author;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -16,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        return BookResource::collection(Book::all());
     }
 
     /**
@@ -30,6 +29,7 @@ class BookController extends Controller
     }
 
     /**
+     * POST, /api/vi/books
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -39,11 +39,13 @@ class BookController extends Controller
     {
         $faker = \Faker\Factory::create(1);
 
-        $author = Author::create([
-            'name' => $faker->name
+        $book = Book::create([
+            'name' => $faker->name,
+            'desc' => $faker->sentence,
+            'publication_year' => $faker->year,
         ]);
 
-        return new AuthorResource($author);
+        return new BookResource($book);
     }
 
     /**
@@ -54,7 +56,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return new BookResource($book);
     }
 
     /**
@@ -74,10 +76,19 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
+     * 
+     * POSTMAN PUT|PATCH
+     * http://127.0.0.1:8000/api/v1/books/6?name=woj&publication_year=1111&desc='some desc'
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $book->update([
+            'name' => $request->input('name'),
+            'desc' => $request->input('desc'),
+            'publication_year' => $request->input('publication_year'),
+        ]);
+
+        return new BookResource($book);
     }
 
     /**
@@ -88,6 +99,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return response(null, 204);
     }
 }
