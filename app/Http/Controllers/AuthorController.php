@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
+        return AuthorResource::collection(Author::all());
     }
 
     /**
@@ -35,7 +36,19 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        // so static..
+        // $author = Author::create([
+        //     'name' => 'John Doe'
+        // ]);
+
+        $faker = \Faker\Factory::create(1);
+            
+        $author = Author::create([
+            'name' => $faker->name
+        ]);
+
+        return new AuthorResource($author);
     }
 
     /**
@@ -46,17 +59,18 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        return response()->json([
-            'data' => [
-                'id' => $author->id,
-                'type' => 'Authors',
-                'attributes' => [
-                    'name' => $author->name,
-                    'created_at' => $author->created_at,
-                    'updated_at' => $author->updated_at,
-                ],
-            ],
-        ]);
+        return new AuthorResource($author);
+        // return response()->json([
+        //     'data' => [
+        //         'id' => $author->id,
+        //         'type' => 'Authors',
+        //         'attributes' => [
+        //             'name' => $author->name,
+        //             'created_at' => $author->created_at,
+        //             'updated_at' => $author->updated_at,
+        //         ],
+        //     ],
+        // ]);
         // return $author;
     }
 
@@ -80,7 +94,20 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+        // so static, lets pass by request
+        // $author->update([
+        //     'name' => 'woj'
+        // ]);
+
+        // POSTMAN: Params: Key → Value name, kama
+        // lub POSTMAN url: ?name=kama
+
+        $author->update([
+            'name' => $request->input('name')
+        ]);
+
+
+        return new AuthorResource($author);
     }
 
     /**
@@ -91,6 +118,6 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
     }
 }

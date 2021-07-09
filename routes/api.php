@@ -27,6 +27,10 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
 
     Route::get('/authors', [AuthorController::class, 'index']);
     Route::get('/authors/{author}', [AuthorController::class, 'show']);
+    // ...., lepiej:
+    Route::apiResource('/authors', AuthorController::class);
+    // php artisan route:list
+
 
 });
 
