@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,15 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get('/authors', [AuthorController::class, 'index']);
+    Route::get('/authors/{author}', [AuthorController::class, 'show']);
+
 });
 
 // POSTMAN: http://127.0.0.1:8000/api/user
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
