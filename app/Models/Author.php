@@ -10,4 +10,11 @@ class Author extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    // hide attributes in API
+    protected $hidden = [
+        'laravel_through_key',
+        'created_at',
+        'updated_at'
+    ];
 }
